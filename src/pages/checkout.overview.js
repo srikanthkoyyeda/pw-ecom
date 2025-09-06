@@ -5,10 +5,8 @@ export class CheckoutOverview {
     this.taxPriceLocator = page.locator(".summary_tax_label");
     this.totalPriceLocator = page.locator(".summary_total_label");
   }
-
   async addItemPrice() {
     let sum = 0;
-
     const taxText = (await this.taxPriceLocator.innerText()).split("$");
     const tax = parseFloat(taxText[1]);
 
