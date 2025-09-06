@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../src/pages/loginPage.js";
-import { Inventory } from "../src/pages/inventory,js.js";
+import { Inventory } from "../src/pages/inventory.js";
 import { CheckoutOverview } from "../src/pages/checkout.overview.js";
 import { CheckoutStep1 } from "../src/pages/checkout.step1.js";
-import { cartPage } from "../src/pages/cartPage.js";
+import { Cart } from "../src/pages/cartPage.js";
 
 test("Login test", async ({ page }) => {
   const loginPage = new LoginPage(page);
@@ -133,6 +133,6 @@ test.describe("@add to cart", () => {
     const totalPrice = await checkoutOverview.totalPrice();
     expect(addIitemTotal).toBe(totalPrice);
 
-    await page.pause();
+    //await page.pause();
   });
 });
