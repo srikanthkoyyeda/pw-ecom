@@ -1,7 +1,16 @@
-
-# Playwright
+# Node / tooling
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+npm-debug.log*
+pnpm-lock.yaml
+yarn.lock
+
+# Playwright outputs
+playwright-report/
+test-results/
+blob-report/
+trace.zip
+
+# Auth or env files
+storage/
+.env
+.DS_Store
