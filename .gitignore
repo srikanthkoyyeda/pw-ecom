@@ -14,5 +14,4 @@ trace.zip
 # Auth or env files
 storage/
 .env
-
 .DS_Store
