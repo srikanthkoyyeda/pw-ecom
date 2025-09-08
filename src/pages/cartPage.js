@@ -5,7 +5,7 @@ export class Cart {
 
   async removeItemfromCart(itemName) {
     const cartItem = this.page
-      .locator(".inventory_item_name")
+      .locator(".cart_item")
       .filter({ hasText: itemName });
     await cartItem.getByRole("button", { name: "Remove" }).click();
   }

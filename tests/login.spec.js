@@ -4,6 +4,7 @@ import { Inventory } from "../src/pages/inventory.js";
 import { CheckoutOverview } from "../src/pages/checkout.overview.js";
 import { CheckoutStep1 } from "../src/pages/checkout.step1.js";
 import { Cart } from "../src/pages/cartPage.js";
+import { Finish } from "../src/pages/finish.page.js";
 
 test("Login test", async ({ page }) => {
   const loginPage = new LoginPage(page);
@@ -96,6 +97,7 @@ test.describe("@add to cart", () => {
     const cartPage = new Cart(page);
     const checkoutStep1 = new CheckoutStep1(page);
     const checkoutOverview = new CheckoutOverview(page);
+    const finish = new Finish(page);
 
     const itemName = [
       "Test.allTheThings() T-Shirt (Red)",
@@ -129,9 +131,24 @@ test.describe("@add to cart", () => {
 
     await checkoutStep1.yourInfo("John", "Doe", "65434");
 
-    const addIitemTotal = await checkoutOverview.addItemPrice();
+    const addItemTotal = await checkoutOverview.addItemPrice();
     const totalPrice = await checkoutOverview.totalPrice();
-    expect(addIitemTotal).toBe(totalPrice);
+    const taxPrice = await checkoutOverview.taxPrice();
+    const subTotal = await checkoutOverview.subTotalOfItems();
+    expect(addItemTotal).toBe(subTotal);
+    expect(totalPrice).toBeCloseTo(subTotal + taxPrice, 2);
+
+    await checkoutOverview.nextPagebutton();
+    await expect(page).toHaveURL(
+      "https://www.saucedemo.com/checkout-complete.html"
+    );
+    await expect(page.locator(".complete-header")).toHaveText(
+      "Thank you for your order!"
+    );
+    await expect(page.getByRole("button", { name: "Back Home" })).toBeVisible();
+    await finish.backHome();
+
+    await expect(page.locator(".shopping_cart_badge")).toHaveCount(0);
 
     //await page.pause();
   });

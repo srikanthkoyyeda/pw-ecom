@@ -4,25 +4,39 @@ export class CheckoutOverview {
     this.itemPriceLocator = page.locator(".inventory_item_price");
     this.taxPriceLocator = page.locator(".summary_tax_label");
     this.totalPriceLocator = page.locator(".summary_total_label");
+    this.summarySubTotal = page.locator(".summary_subtotal_label");
+    this.finish = page.getByRole("button", { name: "Finish" });
   }
+  money(s) {
+    return parseFloat(String(s).replace(/[^0-9.]/g, ""));
+  }
+
   async addItemPrice() {
     let sum = 0;
-    const taxText = (await this.taxPriceLocator.innerText()).split("$");
-    const tax = parseFloat(taxText[1]);
+    const count = await this.itemPriceLocator.count();
 
-    for (let i = 0; i < (await this.itemPriceLocator.count()); i++) {
-      const dPrice = await this.itemPriceLocator.nth(i).innerText();
-      const price = await dPrice.replace(/\$/g, "");
-
-      sum = sum + parseFloat(price);
+    for (let i = 0; i < count; i++) {
+      const dPrice = await this.itemPriceLocator.nth(i).textContent();
+      sum = sum + this.money(dPrice);
     }
-    return sum + tax;
+    return sum;
+  }
+
+  async subTotalOfItems() {
+    const subTotalText = await this.summarySubTotal.textContent();
+    // const subTotal = await subTotalText.split("$");
+    return this.money(subTotalText);
   }
 
   async totalPrice() {
-    const totalText = await this.totalPriceLocator.innerText();
-    const total = await totalText.split("$");
-
-    return parseFloat(total[1]);
+    const totalText = await this.totalPriceLocator.textContent();
+    return this.money(totalText);
+  }
+  async taxPrice() {
+    const taxText = await this.taxPriceLocator.textContent();
+    return this.money(taxText);
+  }
+  async nextPagebutton() {
+    await this.finish.click();
   }
 }
